@@ -261,6 +261,16 @@ describe('dc.coordinateGridChart', function() {
                     });
                 });
 
+                describe("with title", function() {
+                    beforeEach(function() {
+                        chart.xAxisLabel("Some label", undefined, "Long label description...").render()
+                    });
+
+                    it("should create titles for x label", function() {
+                        expect(chart.selectAll("g.x-axis-label-g title").text()).toBe("Long label description...");
+                    });
+                });
+
                 describe("reset axis label", function() {
                     beforeEach(function() {
                         chart.elasticX(true).xAxisLabel("New X Label").redraw();
@@ -409,6 +419,16 @@ describe('dc.coordinateGridChart', function() {
                             expect(chart.effectiveWidth()).toBe(440);
                         });
                     });
+
+                    describe("with title", function() {
+                        beforeEach(function() {
+                            chart.yAxisLabel("Some label", undefined, "Long label description...").render()
+                        });
+
+                        it("should create titles for y label", function() {
+                            expect(chart.selectAll("g.y-axis-label-g title").text()).toBe("Long label description...");
+                        });
+                    });
                 });
             });
 
@@ -454,6 +474,16 @@ describe('dc.coordinateGridChart', function() {
 
                         it("should adjust the chart height with respect to the custom padding", function() {
                             expect(chart.effectiveWidth()).toBe(440);
+                        });
+                    });
+
+                    describe("with title", function() {
+                        beforeEach(function() {
+                            chart.yAxisLabel("Some label", undefined, "Long label description...").render()
+                        });
+
+                        it("should create titles for y label", function() {
+                            expect(chart.selectAll("g.y-axis-label-g title").text()).toBe("Long label description...");
                         });
                     });
                 });

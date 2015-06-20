@@ -62,6 +62,7 @@ dc.coordinateGridMixin = function (_chart) {
     var _xAxisPadding = 0;
     var _xElasticity = false;
     var _xAxisLabel;
+    var _xAxisTitle;
     var _xAxisLabelPadding = 0;
     var _lastXDomain;
 
@@ -70,6 +71,7 @@ dc.coordinateGridMixin = function (_chart) {
     var _yAxisPadding = 0;
     var _yElasticity = false;
     var _yAxisLabel;
+    var _yAxisTitle;
     var _yAxisLabelPadding = 0;
 
     var _brush = d3.svg.brush();
@@ -435,7 +437,11 @@ dc.coordinateGridMixin = function (_chart) {
 
         var axisXLab = g.selectAll('text.' + X_AXIS_LABEL_CLASS);
         if (axisXLab.empty() && _chart.xAxisLabel()) {
-            axisXLab = g.append('text')
+            var textG = g.append('g').attr('class', X_AXIS_LABEL_CLASS + '-g');
+            if (_xAxisTitle !== undefined) {
+                textG.append('title').text(_xAxisTitle);
+            }
+            axisXLab = textG.append('text')
                 .attr('transform', 'translate(' + (_chart.margins().left + _chart.xAxisLength() / 2) + ',' +
                     (_chart.height() - _xAxisLabelPadding) + ')')
                 .attr('class', X_AXIS_LABEL_CLASS)
@@ -513,11 +519,12 @@ dc.coordinateGridMixin = function (_chart) {
     Set or get the x axis label. If setting the label, you may optionally include additional padding to
     the margin to make room for the label. By default the padded is set to 12 to accomodate the text height.
     **/
-    _chart.xAxisLabel = function (_, padding) {
+    _chart.xAxisLabel = function (_, padding, title) {
         if (!arguments.length) {
             return _xAxisLabel;
         }
         _xAxisLabel = _;
+        _xAxisTitle = title;
         _chart.margins().bottom -= _xAxisLabelPadding;
         _xAxisLabelPadding = (padding === undefined) ? DEFAULT_AXIS_LABEL_PADDING : padding;
         _chart.margins().bottom += _xAxisLabelPadding;
@@ -549,7 +556,11 @@ dc.coordinateGridMixin = function (_chart) {
         if (axisYLab.empty() && text) {
 
             var labelYPosition = (_chart.margins().top + _chart.yAxisHeight() / 2);
-            axisYLab = _chart.g().append('text')
+            var textG = _chart.g().append('g').attr('class', Y_AXIS_LABEL_CLASS + '-g');
+            if (_yAxisTitle !== undefined) {
+                textG.append('title').text(_yAxisTitle);
+            }
+            axisYLab = textG.append('text')
                 .attr('transform', 'translate(' + labelXPosition + ',' + labelYPosition + '),rotate(' + rotation + ')')
                 .attr('class', Y_AXIS_LABEL_CLASS + ' ' + axisClass + '-label')
                 .attr('text-anchor', 'middle')
@@ -638,11 +649,12 @@ dc.coordinateGridMixin = function (_chart) {
     to the margin to make room for the label. By default the padded is set to 12 to accomodate the
     text height.
     **/
-    _chart.yAxisLabel = function (_, padding) {
+    _chart.yAxisLabel = function (_, padding, title) {
         if (!arguments.length) {
             return _yAxisLabel;
         }
         _yAxisLabel = _;
+        _yAxisTitle = title;
         _chart.margins().left -= _yAxisLabelPadding;
         _yAxisLabelPadding = (padding === undefined) ? DEFAULT_AXIS_LABEL_PADDING : padding;
         _chart.margins().left += _yAxisLabelPadding;
